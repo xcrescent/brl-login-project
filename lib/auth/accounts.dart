@@ -12,7 +12,6 @@ class AccountActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var todo = ModalRoute.of(context)!.settings.arguments as List;
     return Scaffold(
       appBar: AppBar(title: const Text("Your Account Details")),
@@ -20,7 +19,8 @@ class AccountActivity extends StatelessWidget {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-              Text(todo[0]),
+            Text("Email: ${todo[0]}"),
+            Text("Password: ${todo[1]}"),
           ])),
     );
   }

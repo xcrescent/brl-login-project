@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "894468743368",
+    "project_id": "akgec-286e2",
+    "storage_bucket": "akgec-286e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894468743368:android:e48c1d4eeeae87226c85fd",
+        "android_client_info": {
+          "package_name": "com.example.login_proj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894468743368-hv8eehieba04fvcbmthc5kql8nf26i66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk9Tzkn749oJHiDnW9DZs0M1pgadZPfVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894468743368-hv8eehieba04fvcbmthc5kql8nf26i66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "894468743368-e92vv00cjk96k0tnrnblj1fniqf176tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.loginProj"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
