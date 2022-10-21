@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../auth/login_screen.dart';
-import '../utils/colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -16,7 +14,7 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            backgroundColor: buttonColor,
+            // backgroundColor: buttonColor,
             minimumSize: const Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(

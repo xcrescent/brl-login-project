@@ -21,8 +21,8 @@ class _LoginActivity extends State<LoginActivity>
     with SingleTickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
-  late AnimationController _animationController;
-  late Animation<Size> _heightAnimation;
+  // late AnimationController _animationController;
+  // late Animation<Size> _heightAnimation;
   // late List<Credentials> cred;
   // void _showErrorDialog(String message) {
   //   showDialog(
@@ -45,15 +45,15 @@ class _LoginActivity extends State<LoginActivity>
     // Start listening to changes.
     _emailController.addListener(_printLatestValue);
     _passController.addListener(_printLatestValue);
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(microseconds: 300),
-    );
-    _heightAnimation = Tween<Size>(
-            begin: const Size(double.infinity, 260),
-            end: const Size(double.infinity, 320))
-        .animate(CurvedAnimation(
-            parent: _animationController, curve: Curves.linear));
+    // _animationController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(microseconds: 300),
+    // );
+    // _heightAnimation = Tween<Size>(
+    //         begin: const Size(double.infinity, 260),
+    //         end: const Size(double.infinity, 320))
+    //     .animate(CurvedAnimation(
+    //         parent: _animationController, curve: Curves.linear));
   }
 
   @override
@@ -77,89 +77,102 @@ class _LoginActivity extends State<LoginActivity>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Login")),
-      body: Container(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 150),
+            child:Container(
         padding: const EdgeInsets.all(20),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-            Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(borderSide: BorderSide.none),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-                hintText: 'Enter email address',
-              ),
-              controller: _emailController,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(borderSide: BorderSide.none),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-                hintText: 'Enter password',
-              ),
-              controller: _passController,
-            ),
-          ),
-          CustomButton(
-            text: "Login",
-            onPressed: () {
-              if (_emailController.text != '' && _passController.text != '') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AccountActivity(),
-                      settings: RouteSettings(
-                        arguments: [
-                          _emailController.text,
-                          _passController.text
-                        ],
-                      ),
-                    ));
-              } else {
-                const AlertDialog(
-                  title: Text("Empty"),
-                );
-              }
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                "Need an Account?",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              // const SizedBox(
+              //   // height: 60,
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
+              //   child:
+              TextFormField(
+                decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  hintText: 'Enter email address',
+                ),
+                controller: _emailController,
               ),
               const SizedBox(
-                width: 10,
+                height: 25,
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpActivity()));
-                },
-                child: const Text(
-                  "Sign Up",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 16),
+              //   child:
+              TextFormField(
+                decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  hintText: 'Enter password',
                 ),
+                controller: _passController,
               ),
-            ],
-          )
-        ]),
+              // ),
+              const SizedBox(
+                height: 35,
+              ),
+              CustomButton(
+                text: "Login",
+                onPressed: () {
+                  if (_emailController.text != '' &&
+                      _passController.text != '') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AccountActivity(),
+                          settings: RouteSettings(
+                            arguments: [
+                              _emailController.text,
+                              _passController.text
+                            ],
+                          ),
+                        ));
+                  } else {
+                    const AlertDialog(
+                      title: Text("Empty"),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 35,
+              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: <Widget>[
+                  const Text(
+                    "Need an Account?",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpActivity()));
+                    },
+                    text: "Sign Up",  
+                  ),
+                ],
+              )
+            // ]),
       ),
+    ),
     );
   }
 }
