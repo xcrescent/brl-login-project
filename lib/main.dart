@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
+import 'package:login_proj/auth/forgot_pass.dart';
 import 'package:login_proj/auth/signup_screen.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
 import 'package:login_proj/screens/home_screen.dart';
@@ -29,13 +31,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     return MaterialApp(
       title: 'Flutter Login Project',
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/home': (BuildContext context) => const Homescreen(),
-        '/signup': (BuildContext context) => const SignUpActivity(),
-        '/login': (BuildContext context) => const LoginActivity(),
+        '/home': (context) => const Homescreen(),
+        '/signup': (context) => const SignUpActivity(),
+        '/login': (context) => const LoginActivity(),
+        '/forgotPass':(context) => const ForgotPassActivity(),
       },
       // theme: ThemeData.dark().copyWith(
       //   scaffoldBackgroundColor: backgroundColor,

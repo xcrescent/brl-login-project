@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
-import 'package:login_proj/screens/home_screen.dart';
 import 'package:login_proj/utils/colors.dart';
 
 import '../widgets/custom_button.dart';
@@ -21,6 +22,7 @@ class SignUpActivity extends StatefulWidget {
 
 class _SignUpActivity extends State<SignUpActivity>
     with SingleTickerProviderStateMixin {
+  bool _isLoading = false;
   final _emailController = TextEditingController();
   final _fnameController = TextEditingController();
   final _unameController = TextEditingController();
@@ -49,8 +51,8 @@ class _SignUpActivity extends State<SignUpActivity>
     super.initState();
 
     // Start listening to changes.
-    _emailController.addListener(_printLatestValue);
-    _passController.addListener(_printLatestValue);
+    // _emailController.addListener(_printLatestValue);
+    // _passController.addListener(_printLatestValue);
 
     // _animationController = AnimationController(
     //   vsync: this,
@@ -72,23 +74,77 @@ class _SignUpActivity extends State<SignUpActivity>
     super.dispose();
   }
 
-  void _printLatestValue() {
-    if (_emailController.text == "") {
-      // _emailController.
-    } else if (_passController.text == "") {
-      // _showErrorDialog("Invalid Password Value");
+  Uint8List? _image;
+  selectImage() async {
+    Uint8List im = await AuthController().pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
+  }
+
+  signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await _authController.signUpUser(
+        _emailController.text,
+        _passController.text,
+        _cpassController.text,
+        _fnameController.text,
+        _unameController.text,
+        _image);
+
+    if (res != 'success') {
+      setState(() {
+        _isLoading = false;
+      });
+      if (!mounted) return;
+      return showSnackBarr(res, context);
+
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute<void>(
+      //       builder: (BuildContext context) =>
+      //           const Homescreen(),
+      //     ));
+      // }
+      // });
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const Homescreen(),
+      //       settings: RouteSettings(
+      //         arguments: [
+      //           _emailController.text,
+      //           _passController.text
+      //         ],
+      //       ),
+      //     ))
+    } else {
+      if (!mounted) return;
+      showSnackBarr(
+          'Congratulations account has been created for you', context);
+      return Navigator.of(context).pushReplacementNamed('/home');
     }
   }
+
+  // void _printLatestValue() {
+  //   if (_emailController.text == "") {
+  //     // _emailController.
+  //   } else if (_passController.text == "") {
+  //     // _showErrorDialog("Invalid Password Value");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text("Sign Up"),
-          ),
-          elevation: 0,
-        ),
+        // appBar: AppBar(
+        //   title: const Center(
+        //     child: Text("Sign Up"),
+        //   ),
+        //   elevation: 0,
+        // ),
         body: Container(
             padding: const EdgeInsets.all(20),
             alignment: Alignment.center,
@@ -96,15 +152,34 @@ class _SignUpActivity extends State<SignUpActivity>
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                  const SizedBox(
+                    height: 50,
+                  ),
                   Stack(
-                    children: const [
-                      CircleAvatar(
-                        radius: 64,
-                        backgroundColor: Colors.blue,
-                        backgroundImage: NetworkImage('profilePic'),
-                      ),
+                    children: <Widget>[
+                      
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 64,
+                              backgroundColor: Colors.blue,
+                              backgroundImage: MemoryImage(_image!))
+                          : const CircleAvatar(
+                              radius: 64,
+                              backgroundColor: Colors.blue,
+                              backgroundImage: AssetImage('assets/images/OIP.jpg'),
+                              // NetworkImage(
+                              //   'https://picsum.photos/250?image=9',
+                              // ),
+                              // NetworkImage('file://assets/images/google.png',),
+                            ),
                       Positioned(
-                          right: 5, bottom: 10, child: Icon(Icons.add_a_photo)),
+                        right: 5,
+                        bottom: 10,
+                        child: InkWell(
+                          onTap: selectImage,
+                          child: Icon(Icons.add_a_photo),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -165,6 +240,7 @@ class _SignUpActivity extends State<SignUpActivity>
                     height: 20,
                   ),
                   TextFormField(
+                    obscureText: true,
                     decoration: const InputDecoration(
                       filled: true,
                       border: OutlineInputBorder(
@@ -187,6 +263,7 @@ class _SignUpActivity extends State<SignUpActivity>
                   //       const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
                   // child:
                   TextFormField(
+                    obscureText: true,
                     decoration: const InputDecoration(
                       filled: true,
                       border: OutlineInputBorder(
@@ -216,32 +293,9 @@ class _SignUpActivity extends State<SignUpActivity>
                   //     ),),),
                   // ),
                   ElevatedButton(
-                    onPressed: () async {
-                      if (_emailController.text != '' &&
-                          _passController.text != ''&& _fnameController.text !='' &&
-                          _unameController.text!='' && _passController.text == _cpassController.text) {
-                        await _authController.authCreateWithEmailAndPassword(
-                          _emailController.text,
-                          _passController.text,
-                          _fnameController.text,
-                          _unameController.text,
-                        ).then((_) {
-                          // print("object");
-                          Navigator.of(context).pushReplacementNamed("/home");
-                        });
-
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => const Homescreen(),
-                        //       settings: RouteSettings(
-                        //         arguments: [
-                        //           _emailController.text,
-                        //           _passController.text
-                        //         ],
-                        //       ),
-                        //     ))
-                      } else {}
+                    onPressed: () {
+                      signUpUser();
+                      _fnameController.clear();
                     },
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
@@ -249,32 +303,42 @@ class _SignUpActivity extends State<SignUpActivity>
                             borderRadius: BorderRadius.circular(
                           30,
                         ))),
-                    child: const Text("Signup",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18)),
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text("Signup",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                   ),
                   const SizedBox(
-                    height: 35,
+                    height: 25,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                   const Text(
                     "Already have an Account?",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 18,
                       // fontWeight: FontWeight.bold
                     ),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
-                  CustomButton(
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       Navigator.of(context).pushReplacementNamed('/login');
                     },
-                    text: "Login",
+                    child: const Text(
+                      "Login",
+                        style: TextStyle(fontSize: 22, color: Colors.blue),
+                    ),
                   ),
+                    ]),
                 ]))));
   }
 }

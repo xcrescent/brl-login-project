@@ -9,6 +9,9 @@ class HomeFragment extends StatelessWidget {
       alignment: Alignment.center,
       child: Column(
         children: const [
+          SizedBox(
+            height: 60,
+          ),
           Text("Home"),
         ],
       ),

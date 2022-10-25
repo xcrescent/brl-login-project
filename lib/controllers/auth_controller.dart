@@ -1,12 +1,57 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:login_proj/utils/const.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:login_proj/controllers/notification_controller.dart';
 
 class AuthController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  Stream<User?> get authChanges => _auth.authStateChanges();
+  Stream<User?> get authChanges => firebaseAuth.authStateChanges();
+
+  // add image to storage
+  _uploadImageToStorage(Uint8List? image) async {
+    Reference ref = firebaseStorage
+        .ref()
+        .child('profilePic')
+        .child(firebaseAuth.currentUser!.uid);
+    UploadTask uploadTask = ref.putData(image!);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  // pick image
+  pickImage(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    XFile? _file = await imagePicker.pickImage(source: source);
+    if (_file != null) {
+      return await _file.readAsBytes();
+    } else {
+      print("No image selected");
+    }
+  }
+
+  forgotPassword(String email) async {
+    String res = 'Some error occured';
+    try {
+      if (email.isNotEmpty) {
+        await firebaseAuth.sendPasswordResetEmail(email: email);
+        res = 'success';
+      } else {
+        res = 'Email field must not be empty';
+      }
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
+  validatePassword(String pass) {
+    if (true) {}
+    
+    return "strong";
+  }
 
   signinWithGoogle() async {
     try {
@@ -17,12 +62,12 @@ class AuthController {
         idToken: googleAuth?.idToken,
       );
       UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
+          await firebaseAuth.signInWithCredential(credential);
       User? user = userCredential.user;
       if (user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
           //store user details in firestore
-          _firebaseFirestore.collection('users').doc(user.uid).set({
+          firebaseFirestore.collection('users').doc(user.uid).set({
             'fname': user.displayName,
             'username': user.email,
             'uid': user.uid,
@@ -31,54 +76,90 @@ class AuthController {
           });
         }
       }
-      
     } catch (e) {}
   }
 
-  authCreateWithEmailAndPassword(email, pass, fname, username) async {
+  Future<String> signUpUser(String email, String pass, String cpass,
+      String fname, String username, Uint8List? image) async {
+    String res = 'Some error occured';
     try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: pass,
-      );
-      User? user = userCredential.user;
-      await user?.sendEmailVerification();
-      if (user != null) {
-        if (userCredential.additionalUserInfo!.isNewUser) {
-          //store user details in firestore
-          _firebaseFirestore.collection('users').doc(user.uid).set({
-            'fname': fname,
-            'username': username,
-            'uid': user.uid,
-            'email': email,
-            'userImage': null,
-          });
+      if (fname.isNotEmpty &&
+          username.isNotEmpty &&
+          pass.isNotEmpty &&
+          email.isNotEmpty) {
+        if (pass == cpass) {
+          if (validatePassword(pass) == 'strong') {
+            UserCredential userCredential =
+                await firebaseAuth.createUserWithEmailAndPassword(
+              email: email,
+              password: pass,
+            );
+            String downloadUrl;
+            if (image != null) {
+              downloadUrl = await _uploadImageToStorage(image);
+            } else {
+              downloadUrl = '';
+            }
+            // User? user = userCredential.user;
+            await userCredential.user!.sendEmailVerification();
+            if (userCredential.additionalUserInfo!.isNewUser) {
+              //store user details in firestore
+              firebaseFirestore
+                  .collection('users')
+                  .doc(userCredential.user!.uid)
+                  .set({
+                'fname': fname,
+                'username': username,
+                'uid': userCredential.user!.uid,
+                'email': email,
+                'userImage': downloadUrl,
+              });
+            }
+            res = 'success';
+          } else {
+            res = validatePassword(pass);
+          }
+        } else {
+          res = 'Enter same password in both fields';
         }
+      } else {
+        res = 'Fields must not be empty';
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        res = 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        res = 'The account already exists for that email.';
       }
     } catch (e) {
-      print(e);
+      res = e.toString();
     }
+    // print(res);
+    return res;
   }
 
-  authSignInWithEmailAndPassword(email, pass) async {
+  loginUsers(String email, String pass) async {
+    String res = 'Some error occured';
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: pass);
+      if (email.isNotEmpty && pass.isNotEmpty) {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: pass);
+        res = 'success';
+      } else {
+        res = 'Fields must not be empty';
+      }
+
       // print("Signed in");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        res = 'No user found for this email.';
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        res = 'Incorrect password';
       }
+    } catch (e) {
+      res = e.toString();
     }
+    return res;
   }
   // git client secret 0a443c074eb2a80e4e060483b4695feeaabc533d
 
@@ -93,4 +174,8 @@ class AuthController {
       // print('Wrong password provided for that user.');
     }
   }
+}
+
+showSnackBarr(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
 }

@@ -1,12 +1,10 @@
-// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
 import 'package:login_proj/screens/home_screen.dart';
-// import 'package:login_proj/screens/home_screen.dart';
 import 'package:login_proj/utils/colors.dart';
-import 'package:login_proj/widgets/custom_button.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
+
 // class Credentials {
 //   final String email;
 //   final String password;
@@ -23,6 +21,7 @@ class LoginActivity extends StatefulWidget {
 
 class _LoginActivity extends State<LoginActivity>
     with SingleTickerProviderStateMixin {
+    bool _isLoading = false;
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   final AuthController _authController = AuthController();
@@ -42,14 +41,48 @@ class _LoginActivity extends State<LoginActivity>
   //             ],
   //           ));
   // }
+  loginUsers() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await _authController.loginUsers(
+                              _emailController.text, 
+                              _passController.text
+                              );
+    if (res != 'success') {
+      setState(() {
+        _isLoading = false;
+      });
+      if (!mounted) return;
+      return showSnackBarr(res, context);
+                      //     .then((_) {
+                            
+                      //   Navigator.of(context).pushReplacementNamed('/home');
+                      //   // Navigator.of(context).pushReplacementNamed('/home');
+                      //   // MaterialPageRoute(
+                      //   //   builder: (context) => const Homescreen(),
+                      //   //   settings: RouteSettings(
+                      //   //     arguments: [
+                      //   //       _emailController.text,
+                      //   //       _passController.text
+                      //   //     ],
+                      //   // ),
+      } else {
+      if (!mounted) return;
+      showSnackBarr(
+          'Congratulations you have been successfully signed in..', context);
+      return Navigator.of(context).pushReplacementNamed('/home');
+    }
+    }
+
 
   @override
   void initState() {
     super.initState();
 
     // Start listening to changes.
-    _emailController.addListener(_printLatestValue);
-    _passController.addListener(_printLatestValue);
+    // _emailController.addListener(_printLatestValue);
+    // _passController.addListener(_printLatestValue);
     // _animationController = AnimationController(
     //   vsync: this,
     //   duration: const Duration(microseconds: 300),
@@ -70,13 +103,13 @@ class _LoginActivity extends State<LoginActivity>
     super.dispose();
   }
 
-  void _printLatestValue() {
-    if (_emailController.text == "") {
-      // _showErrorDialog("Invalid Email Address");
-    } else if (_passController.text == "") {
-      // _showErrorDialog("Invalid Password Value");
-    }
-  }
+  // void _printLatestValue() {
+  //   if (_emailController.text == "") {
+  //     // _showErrorDialog("Invalid Email Address");
+  //   } else if (_passController.text == "") {
+  //     // _showErrorDialog("Invalid Password Value");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +160,7 @@ class _LoginActivity extends State<LoginActivity>
                   //   padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 16),
                   //   child:
                   TextFormField(
+                    obscureText: true,
                     decoration: const InputDecoration(
                       filled: true,
                       border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -141,59 +175,70 @@ class _LoginActivity extends State<LoginActivity>
                   const SizedBox(
                     height: 35,
                   ),
-                  CustomButton(
-                    text: "Login",
-                    onPressed: () async {
-                      // if (_emailController.text != '' &&
-                      //     _passController.text != '') {
-                      // print("object");
-                      await _authController
-                          .authSignInWithEmailAndPassword(
-                              _emailController.text, _passController.text)
-                          .then((_) {
-                            
-                        Navigator.of(context).pushReplacementNamed('/home');
-                        // Navigator.of(context).pushReplacementNamed('/home');
-                        // MaterialPageRoute(
-                        //   builder: (context) => const Homescreen(),
-                        //   settings: RouteSettings(
-                        //     arguments: [
-                        //       _emailController.text,
-                        //       _passController.text
-                        //     ],
-                        // ),
-                      });
+                  ElevatedButton(
+                    onPressed:
+                    () {
+                        loginUsers();
                       // } else {
                       //   const AlertDialog(
                       //     title: Text("Empty"),
                       //   );
                       // }
                     },
+                    style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                      30,
+                    ))),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text("Login",
+                        style: TextStyle( fontSize: 18)),
                   ),
+                  const SizedBox(
+                height: 20,
+              ),
+                  InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/forgotPass');
+                },
+                child: const Text(
+                  "Forgot Password?",
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+              ),
                   const SizedBox(
                     height: 20,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                   const Text(
                     "Need an Account?",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       // fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
+                      width: 10,
+                    ),
+                  InkWell(
+                    
+                    onTap: () {
                       Navigator.of(context).pushReplacementNamed('/signup');
                     },
                     child: const Text("Sign Up", style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 22,
+                      color: Colors.blue
                     ),),
                   ),
+                ]),
               const SizedBox(
                 height: 20,
               ),
