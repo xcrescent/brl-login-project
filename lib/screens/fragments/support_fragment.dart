@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:login_proj/utils/colors.dart';
+import 'package:path/path.dart';
 
 class SupportFragment extends StatefulWidget {
   const SupportFragment({super.key});
@@ -15,10 +17,28 @@ class _SupportFragment extends State<SupportFragment> {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(30),
-      child: Column(
+       decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(100),
+            bottomRight: Radius.circular(100),
+            // bottomLeft: Radius.elliptical(210, 210),
+            // bottomRight: Radius.elliptical(110, 110),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 0.1,
+              blurRadius: 0.1,
+              offset: const Offset(0, 1),
+            )
+          ]),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 150),
+        child: Column(
         children: [
           const SizedBox(
-            height: 100,
+            height: 200,
           ),
           const Text(
             "Query: ",
@@ -30,12 +50,33 @@ class _SupportFragment extends State<SupportFragment> {
           TextField(
             keyboardType: TextInputType.multiline,
             maxLines: null,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: buttonColor,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: buttonColor,
+                )
+              ),
+            ),
+            cursorColor: buttonColor,
             controller: _textController,
+            style: const TextStyle(
+              decorationColor: buttonColor,
+              color: buttonColor,
+              
+            ),
           ),
           const SizedBox(
             height: 40,
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+            ),
               onPressed: () {
                 CollectionReference queries =
                     FirebaseFirestore.instance.collection("query");
@@ -47,6 +88,7 @@ class _SupportFragment extends State<SupportFragment> {
               child: const Text("Send")),
         ],
       ),
+    ),
     );
   }
 }

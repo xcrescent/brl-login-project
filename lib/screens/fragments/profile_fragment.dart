@@ -28,7 +28,30 @@ class _ProfileFragment extends State<ProfileFragment> {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     return Container(
       alignment: Alignment.center,
+      // height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            // topLeft: Radius.circular(100),
+            // topRight: Radius.circular(100),
+            bottomLeft: Radius.circular(100),
+            bottomRight: Radius.circular(100),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 0.1,
+              blurRadius: 0.1,
+              offset: const Offset(0, 1),
+            )
+          ]),
+      // padding: const EdgeInsets.only(
+      //   top: 20,
+      //   left: 50,
+      //   right: 15,
+      // ),
       child: Column(
+        
         children: [
           FutureBuilder<DocumentSnapshot>(
             future: users.doc(uid).get(),
@@ -107,7 +130,7 @@ class _ProfileFragment extends State<ProfileFragment> {
               : InkWell(
                   child: const Text(
                     "Verify Email",
-                    style: TextStyle(fontSize: 28, color: Colors.blue),
+                    style: TextStyle(fontSize: 28, color: Colors.black),
                   ),
                   onTap: () async {
                     await firebaseAuth.currentUser!.reload();
@@ -128,9 +151,12 @@ class _ProfileFragment extends State<ProfileFragment> {
                   },
                 ),
           const SizedBox(
-            height: 30,
+            height: 50,
           ),
           ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+               ),
               onPressed: () async {
                 await _authController.authSignOut().then((_) {
                   Navigator.pushReplacementNamed(context, "/login");
@@ -143,7 +169,10 @@ class _ProfileFragment extends State<ProfileFragment> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
-              ))
+              )),
+              const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );

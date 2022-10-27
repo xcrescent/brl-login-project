@@ -157,16 +157,16 @@ class _SignUpActivity extends State<SignUpActivity>
                   ),
                   Stack(
                     children: <Widget>[
-                      
                       _image != null
                           ? CircleAvatar(
                               radius: 64,
-                              backgroundColor: Colors.blue,
+                              backgroundColor: Colors.black,
                               backgroundImage: MemoryImage(_image!))
                           : const CircleAvatar(
                               radius: 64,
-                              backgroundColor: Colors.blue,
-                              backgroundImage: AssetImage('assets/images/OIP.jpg'),
+                              backgroundColor: Colors.black,
+                              backgroundImage:
+                                  AssetImage('assets/images/OIP.jpg'),
                               // NetworkImage(
                               //   'https://picsum.photos/250?image=9',
                               // ),
@@ -186,6 +186,7 @@ class _SignUpActivity extends State<SignUpActivity>
                     height: 20,
                   ),
                   TextFormField(
+ cursorColor: buttonColor,
                     decoration: const InputDecoration(
                       filled: true,
                       border: OutlineInputBorder(
@@ -196,7 +197,12 @@ class _SignUpActivity extends State<SignUpActivity>
                           color: buttonColor,
                         ),
                       ),
+                      labelStyle: TextStyle(color: buttonColor),
                       labelText: 'Enter full name',
+                      prefixIcon: Icon(
+                          Icons.person,
+                          color: buttonColor,
+                        )
                     ),
                     controller: _fnameController,
                   ),
@@ -204,6 +210,7 @@ class _SignUpActivity extends State<SignUpActivity>
                     height: 20,
                   ),
                   TextFormField(
+ cursorColor: buttonColor,
                     decoration: const InputDecoration(
                       filled: true,
                       border: OutlineInputBorder(
@@ -214,7 +221,12 @@ class _SignUpActivity extends State<SignUpActivity>
                           color: buttonColor,
                         ),
                       ),
+                      labelStyle: TextStyle(color: buttonColor),
                       labelText: 'Enter your username',
+                      prefixIcon: Icon(
+                          Icons.person,
+                          color: buttonColor,
+                        )
                     ),
                     controller: _unameController,
                   ),
@@ -222,6 +234,7 @@ class _SignUpActivity extends State<SignUpActivity>
                     height: 20,
                   ),
                   TextFormField(
+ cursorColor: buttonColor,
                     decoration: const InputDecoration(
                       filled: true,
                       border: OutlineInputBorder(
@@ -230,9 +243,15 @@ class _SignUpActivity extends State<SignUpActivity>
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: buttonColor,
+                          
                         ),
                       ),
+                      labelStyle: TextStyle(color: buttonColor),
                       labelText: 'Enter email address',
+                      prefixIcon: Icon(
+                          Icons.email,
+                          color: buttonColor,
+                        ),
                     ),
                     controller: _emailController,
                   ),
@@ -240,6 +259,7 @@ class _SignUpActivity extends State<SignUpActivity>
                     height: 20,
                   ),
                   TextFormField(
+ cursorColor: buttonColor,
                     obscureText: true,
                     decoration: const InputDecoration(
                       filled: true,
@@ -251,7 +271,12 @@ class _SignUpActivity extends State<SignUpActivity>
                           color: buttonColor,
                         ),
                       ),
+                      labelStyle: TextStyle(color: buttonColor),
                       labelText: 'Enter password',
+                      prefixIcon: Icon(
+                          Icons.lock,
+                          color: buttonColor,
+                        ),
                     ),
                     controller: _passController,
                   ),
@@ -263,6 +288,7 @@ class _SignUpActivity extends State<SignUpActivity>
                   //       const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
                   // child:
                   TextFormField(
+ cursorColor: buttonColor,
                     obscureText: true,
                     decoration: const InputDecoration(
                       filled: true,
@@ -272,8 +298,15 @@ class _SignUpActivity extends State<SignUpActivity>
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                         color: buttonColor,
+                        
                       )),
+                      labelStyle: TextStyle(color: buttonColor),
                       labelText: 'Re-enter password',
+                      prefixIcon: Icon(
+                          Icons.lock,
+                          
+                          color: buttonColor,
+                        )
                     ),
                     controller: _cpassController,
                   ),
@@ -294,15 +327,22 @@ class _SignUpActivity extends State<SignUpActivity>
                   // ),
                   ElevatedButton(
                     onPressed: () {
-                      signUpUser();
-                      _fnameController.clear();
+                      if (!(_authController
+                          .validateEmail(_emailController.text))) {
+                        showSnackBarr("Email not valid", context);
+                      } else {
+                        signUpUser();
+                        // _fnameController.clear();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                          30,
-                        ))),
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: buttonColor,
+                    ),
+                    
                     child: _isLoading
                         ? const Center(
                             child: CircularProgressIndicator(
@@ -311,34 +351,38 @@ class _SignUpActivity extends State<SignUpActivity>
                           )
                         : const Text("Signup",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)),
+                                fontWeight: FontWeight.bold, 
+                                fontSize: 18
+                                ),
+                            ),
                   ),
                   const SizedBox(
                     height: 25,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                  const Text(
-                    "Already have an Account?",
-                    style: TextStyle(
-                      fontSize: 18,
-                      // fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed('/login');
-                    },
-                    child: const Text(
-                      "Login",
-                        style: TextStyle(fontSize: 22, color: Colors.blue),
-                    ),
-                  ),
-                    ]),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Text(
+                          "Already have an Account?",
+                          style: TextStyle(
+                            fontSize: 18,
+                            // fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/login');
+                          },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(fontSize: 22, color: Colors.black),
+                          ),
+                        ),
+                      ]),
                 ]))));
   }
 }

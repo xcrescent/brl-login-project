@@ -34,46 +34,90 @@ class _HomeScreen extends State<Homescreen> {
     // final NotificationController notificationController = NotificationController();
     // notificationController.setupNotification();
   }
-
+  
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     
     // Object todo = (ModalRoute.of(context)!.settings.arguments) ?? [];
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Container(         
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 0.1,
+                        blurRadius: 0.1,
+                        offset: const Offset(0, 1),
+                      )
+                    ]),child:IconButton(
+          icon: const Icon(Icons.menu_rounded,
+            color: Colors.grey,
+          ),
+          onPressed: () {
+            scaffoldKey.currentState?.openDrawer();
+          },
+        ),),),
         title: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(children: [
-            RichText(text: const TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Howdy, What are You\n Looking For?',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-
-                  )
+          alignment: Alignment.topRight,
+          padding: const EdgeInsets.only(
+            top: 5,
+            left: 20,
+            // right: 15,
+          ),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            const SizedBox(
+              width: 20,
+            ),
+            Stack(children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 0.1,
+                        blurRadius: 0.1,
+                        offset: const Offset(0, 1),
+                      )
+                    ]),
+                padding: const EdgeInsets.all(10),
+                child: const Icon(
+                  Icons.mode_night_outlined,
+                  color: Colors.grey,
                 ),
-                TextSpan(
-                  text: '🤪',
-                  style: TextStyle(
-                    fontSize: 35,
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Container(
+                  height: 10,
+                  width: 10,
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
                   ),
                 ),
-                ]
-                ),),
-          ],) 
+              ),
+            ]),
+          ]),
         ),
       ),
       drawer: Drawer(
         child: ListView(padding: EdgeInsets.zero, children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.black,
             ),
             child: Padding(
               padding: EdgeInsets.only(top: 100),
@@ -122,24 +166,35 @@ class _HomeScreen extends State<Homescreen> {
           ),
         ]),
       ),
-      body: Center(
-        child: pages.elementAt(pageIndex),
-      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+        Center(
+          child: pages.elementAt(pageIndex),
+        ),
+      ]),),
       bottomNavigationBar: BottomNavigationBar(
-          // selectedItemColor: Colors.white,
-          // unselectedItemColor: Colors.grey,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
           currentIndex: pageIndex,
           onTap: _onItemTapped,
           // backgroundColor: footerColor,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home_max_rounded),
               label: "Home",
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline), label: "Profile"),
+                icon: Icon(Icons.person_outline), 
+                label: "Profile",
+                activeIcon: Icon(Icons.person),
+                ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.support_outlined), label: "Support"),
+                icon: Icon(Icons.support_outlined), 
+                label: "Support",
+                activeIcon: Icon(Icons.support_sharp),
+                ),
           ]),
     );
   }

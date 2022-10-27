@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
 import 'package:login_proj/screens/home_screen.dart';
@@ -21,7 +20,7 @@ class LoginActivity extends StatefulWidget {
 
 class _LoginActivity extends State<LoginActivity>
     with SingleTickerProviderStateMixin {
-    bool _isLoading = false;
+  bool _isLoading = false;
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   final AuthController _authController = AuthController();
@@ -46,35 +45,32 @@ class _LoginActivity extends State<LoginActivity>
       _isLoading = true;
     });
     String res = await _authController.loginUsers(
-                              _emailController.text, 
-                              _passController.text
-                              );
+        _emailController.text, _passController.text);
     if (res != 'success') {
       setState(() {
         _isLoading = false;
       });
       if (!mounted) return;
       return showSnackBarr(res, context);
-                      //     .then((_) {
-                            
-                      //   Navigator.of(context).pushReplacementNamed('/home');
-                      //   // Navigator.of(context).pushReplacementNamed('/home');
-                      //   // MaterialPageRoute(
-                      //   //   builder: (context) => const Homescreen(),
-                      //   //   settings: RouteSettings(
-                      //   //     arguments: [
-                      //   //       _emailController.text,
-                      //   //       _passController.text
-                      //   //     ],
-                      //   // ),
-      } else {
+      //     .then((_) {
+
+      //   Navigator.of(context).pushReplacementNamed('/home');
+      //   // Navigator.of(context).pushReplacementNamed('/home');
+      //   // MaterialPageRoute(
+      //   //   builder: (context) => const Homescreen(),
+      //   //   settings: RouteSettings(
+      //   //     arguments: [
+      //   //       _emailController.text,
+      //   //       _passController.text
+      //   //     ],
+      //   // ),
+    } else {
       if (!mounted) return;
       showSnackBarr(
           'Congratulations you have been successfully signed in..', context);
       return Navigator.of(context).pushReplacementNamed('/home');
     }
-    }
-
+  }
 
   @override
   void initState() {
@@ -104,10 +100,12 @@ class _LoginActivity extends State<LoginActivity>
   }
 
   // void _printLatestValue() {
-  //   if (_emailController.text == "") {
-  //     // _showErrorDialog("Invalid Email Address");
-  //   } else if (_passController.text == "") {
-  //     // _showErrorDialog("Invalid Password Value");
+  //   if (_authController.validateEmail(_emailController.text)) {
+  //     showSnackBarr("valid", context);
+  //     //     // _showErrorDialog("Invalid Email Address");
+  //   } else {
+  //     //     // _showErrorDialog("Invalid Password Value");
+  //     showSnackBarr("content", context);
   //   }
   // }
 
@@ -129,64 +127,81 @@ class _LoginActivity extends State<LoginActivity>
             //     }
             //     return
             Container(
-          padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 150),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(
-                    height: 60,
+      padding: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
+          padding: const EdgeInsets.only(top: 150),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(
+                height: 60,
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
+              //   child:
+              TextFormField(
+                cursorColor: buttonColor,
+                decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 16),
-                  //   child:
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: buttonColor),
-                      ),
-                      labelText: 'Enter email address',
+                  labelText: 'Enter email address',
+                  labelStyle: TextStyle(
+                    color: buttonColor
+                  ),
+                  
+                  prefixIcon: Icon(
+                    Icons.email,
+                  color: buttonColor,
+                  ),
+                ),
+                controller: _emailController,
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 16),
+              //   child:
+              TextFormField(
+                obscureText: true,
+                cursorColor: buttonColor,
+                decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  labelText: 'Enter password',
+                  labelStyle: TextStyle(color: buttonColor),
+                  prefixIcon: Icon(
+                      Icons.lock,
+                      color: buttonColor,
                     ),
-                    controller: _emailController,
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 16),
-                  //   child:
-                  TextFormField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: buttonColor),
-                      ),
-                      labelText: 'Enter password',
-                    ),
-                    controller: _passController,
-                  ),
-                  // ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  ElevatedButton(
-                    onPressed:
-                    () {
-                        loginUsers();
-                      // } else {
-                      //   const AlertDialog(
-                      //     title: Text("Empty"),
-                      //   );
-                      // }
-                    },
-                    style: ElevatedButton.styleFrom(
+                ),
+                controller: _passController,
+              ),
+              // ),
+              const SizedBox(
+                height: 35,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  
+                    loginUsers();
+                  
+                  // } else {
+                  //   const AlertDialog(
+                  //     title: Text("Empty"),
+                  //   );
+                  // }
+                },
+                style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                       30,
@@ -197,69 +212,69 @@ class _LoginActivity extends State<LoginActivity>
                           color: Colors.white,
                         ),
                       )
-                    : const Text("Login",
-                        style: TextStyle( fontSize: 18)),
-                  ),
-                  const SizedBox(
+                    : const Text("Login", style: TextStyle(fontSize: 18)),
+              ),
+              const SizedBox(
                 height: 20,
               ),
-                  InkWell(
+              InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed('/forgotPass');
                 },
                 child: const Text(
                   "Forgot Password?",
-                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                  style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                  const Text(
-                    "Need an Account?",
-                    style: TextStyle(
-                      fontSize: 17,
-                      // fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                      width: 10,
-                    ),
-                  InkWell(
-                    
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed('/signup');
-                    },
-                    child: const Text("Sign Up", style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.blue
-                    ),),
-                  ),
-                ]),
               const SizedBox(
                 height: 20,
               ),
-                  FloatingActionButton(
-                    onPressed: () async {
-                      _authController.signinWithGoogle().then((_) {
-                        Navigator.pushReplacement(context, MaterialPageRoute<void>(
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      "Need an Account?",
+                      style: TextStyle(
+                        fontSize: 17,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushReplacementNamed('/signup');
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(fontSize: 22, color: Colors.black),
+                      ),
+                    ),
+                  ]),
+              const SizedBox(
+                height: 20,
+              ),
+              FloatingActionButton(
+                onPressed: () async {
+                  _authController.signinWithGoogle().then((_) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute<void>(
                           builder: (BuildContext context) => const Homescreen(),
                         ));
-                      });
-                    },
-                    // foregroundColor: null,
-                    backgroundColor: Colors.transparent,
-                    child: Image.asset('assets/images/google.png'),
-                    // shape: 
-                  )
-                ],
+                  });
+                },
+                // foregroundColor: null,
+                backgroundColor: Colors.transparent,
+                child: Image.asset('assets/images/google.png'),
+                // shape:
               )
-              // ]),
-              ),
-        )
+            ],
+          )
+          // ]),
+          ),
+    )
         // },
         // ),
         );

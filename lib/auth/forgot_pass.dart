@@ -49,12 +49,13 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
             ),
             const Text(
               "Forgot Password",
-              style: TextStyle(fontSize: 28, color: Colors.blue),
+              style: TextStyle(fontSize: 28, color: Colors.black),
             ),
             const SizedBox(
               height: 50,
             ),
             TextFormField(
+              cursorColor: buttonColor,
               decoration: const InputDecoration(
                 filled: true,
                 border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -62,6 +63,9 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
                   borderSide: BorderSide(color: buttonColor),
                 ),
                 labelText: 'Enter Email',
+                labelStyle: TextStyle(
+                  color: buttonColor,
+                )
               ),
               controller: _emailController,
             ),
@@ -74,6 +78,7 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
               },
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: buttonColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                     30,
