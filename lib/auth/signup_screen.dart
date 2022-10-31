@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
 import 'package:login_proj/utils/colors.dart';
-
-import '../widgets/custom_button.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // class Credentials {
 //   final String email;

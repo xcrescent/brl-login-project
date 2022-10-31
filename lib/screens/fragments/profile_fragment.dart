@@ -144,7 +144,7 @@ class _ProfileFragment extends State<ProfileFragment> {
                       });
                     } else {
                       setState(() {});
-                      if (!mounted) return;
+                      // if (!mounted) return;
                       return showSnackBarr("Already Verified", context);
                       
                     }

@@ -1,7 +1,12 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+/// circular progress indicator on profile
+/// Home Fragment ui
+/// Notification setup
+/// Support Past tickets and queries and ui fixation
+/// Google signin bug 
+/// Drawer UI changes
+/// Dark mode implementation
+/// Internet Not connected 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:login_proj/auth/forgot_pass.dart';
 import 'package:login_proj/auth/signup_screen.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeMode currentTheme = ThemeMode.light;
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     return MaterialApp(
       title: 'Flutter Login Project',
       initialRoute: '/',
@@ -65,9 +70,9 @@ class MyApp extends StatelessWidget {
               );
             }
             if (snapshot.hasData) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
+              // SchedulerBinding.instance.addPostFrameCallback((_) {
                 Navigator.of(context).pushReplacementNamed('/home');
-              });
+              // });
             }
             return const MyHomePage(title: 'BRL Login Project',);
           }),
