@@ -13,6 +13,8 @@ class NotificationController {
         'fcmToken': fcmToken,
       });
     }
-    catch (e) {} 
+    catch (e) {
+      
+    } 
   }
 }

@@ -122,7 +122,7 @@ class _ProfileFragment extends State<ProfileFragment> {
                 );
                 // Text("Full Name: ${data['full_name']} ${data['last_name']}");
               }
-              return const Text("loading");
+              return const CircularProgressIndicator();
             },
           ),
           firebaseAuth.currentUser!.emailVerified
@@ -144,7 +144,7 @@ class _ProfileFragment extends State<ProfileFragment> {
                       });
                     } else {
                       setState(() {});
-                      // if (!mounted) return;
+                      if (!mounted) return;
                       return showSnackBarr("Already Verified", context);
                       
                     }

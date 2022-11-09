@@ -1,12 +1,14 @@
-/// circular progress indicator on profile
+/// circular progress indicator on profile                            done
 /// Home Fragment ui
 /// Notification setup
 /// Support Past tickets and queries and ui fixation
-/// Google signin bug 
+/// Google signin bug                                                 done
 /// Drawer UI changes
 /// Dark mode implementation
-/// Internet Not connected 
+/// Internet Not connected                                            done
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:login_proj/auth/forgot_pass.dart';
 import 'package:login_proj/auth/signup_screen.dart';
 import 'package:login_proj/controllers/auth_controller.dart';
@@ -28,35 +30,47 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
-  
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     ThemeMode currentTheme = ThemeMode.light;
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    toggleTheme() {
+      setState(() {
+        currentTheme =
+            currentTheme == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+      });
+    }
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     return MaterialApp(
       title: 'Flutter Login Project',
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/home': (context) => const Homescreen(),
+        '/home': (context) => Homescreen(
+            // themeX: toggleTheme(),
+            ),
         '/signup': (context) => const SignUpActivity(),
         '/login': (context) => const LoginActivity(),
-        '/forgotPass':(context) => const ForgotPassActivity(),
+        '/forgotPass': (context) => const ForgotPassActivity(),
       },
       theme: ThemeData.light().copyWith(
-        primaryColor: Colors.black,
-        hintColor: Colors.black,
-        iconTheme: const IconThemeData(
-          color: Colors.grey,
-
-        ),
-        focusColor: buttonColor
-      ),
+          primaryColor: Colors.black,
+          hintColor: Colors.black,
+          iconTheme: const IconThemeData(
+            color: Colors.grey,
+          ),
+          focusColor: buttonColor),
       darkTheme: ThemeData.dark().copyWith(
         brightness: Brightness.dark,
       ),
@@ -71,10 +85,15 @@ class MyApp extends StatelessWidget {
             }
             if (snapshot.hasData) {
               // SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context).pushReplacementNamed('/home');
-              // });
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => Homescreen(
+                    // themeX: toggleTheme
+                    )));
             }
-            return const MyHomePage(title: 'BRL Login Project',);
+            return MyHomePage(
+              title: 'BRL Login Project',
+              toggleTheme: toggleTheme,
+            );
           }),
       debugShowCheckedModeBanner: false,
     );
@@ -82,25 +101,43 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+  const MyHomePage({super.key, required this.title, required this.toggleTheme});
   final String title;
-
+  final Function toggleTheme;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   // final AuthController _authController = AuthController();
-  
+  @override
+  void initState() {
+    super.initState();
+    checkUserConnection();
+  }
+
+  bool activeConnection = false;
+  String T = "";
+
+  Future checkUserConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          activeConnection = true;
+          // T = "Turn off the data and repress again";
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        activeConnection = false;
+        T = "Turn On the data and repress again";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // void _toggleTheme() {
-    //   setState(() {
-    //     currentTheme =
-    //         currentTheme == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
-    //   });
-    // }
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       // appBar: AppBar(
@@ -134,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushReplacementNamed("/login",);
+                      Navigator.pushReplacementNamed(context, "/login");
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
@@ -144,6 +181,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       "Login",
                     )),
               ),
+
+              const Divider(),
+              Text(T),
+              const Divider(),
               // Padding(
               //   padding: const EdgeInsets.symmetric(
               //     vertical: 30,

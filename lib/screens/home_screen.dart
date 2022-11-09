@@ -1,13 +1,19 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:login_proj/controllers/notification_controller.dart';
 import 'package:login_proj/screens/fragments/home_fragment.dart';
 import 'package:login_proj/screens/fragments/profile_fragment.dart';
 import 'package:login_proj/screens/fragments/support_fragment.dart';
 import 'package:login_proj/utils/const.dart';
 
 class Homescreen extends StatefulWidget {
-  const Homescreen({super.key});
-
+  Homescreen({
+    super.key, 
+    // required this.themeX
+    });
+  // void themeX;
   @override
   State<Homescreen> createState() => _HomeScreen();
 }
@@ -31,14 +37,14 @@ class _HomeScreen extends State<Homescreen> {
   @override
   void initState() {
     super.initState();
-    // final NotificationController notificationController = NotificationController();
-    // notificationController.setupNotification();
+    final NotificationController notificationController =
+        NotificationController();
+    notificationController.setupNotification();
   }
-  
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    
     // Object todo = (ModalRoute.of(context)!.settings.arguments) ?? [];
     return Scaffold(
       key: scaffoldKey,
@@ -47,25 +53,29 @@ class _HomeScreen extends State<Homescreen> {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(5),
-          child: Container(         
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 0.1,
-                        blurRadius: 0.1,
-                        offset: const Offset(0, 1),
-                      )
-                    ]),child:IconButton(
-          icon: const Icon(Icons.menu_rounded,
-            color: Colors.grey,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 0.1,
+                    blurRadius: 0.1,
+                    offset: const Offset(0, 1),
+                  )
+                ]),
+            child: IconButton(
+              icon: const Icon(
+                Icons.menu_rounded,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                scaffoldKey.currentState?.openDrawer();
+              },
+            ),
           ),
-          onPressed: () {
-            scaffoldKey.currentState?.openDrawer();
-          },
-        ),),),
+        ),
         title: Container(
           alignment: Alignment.topRight,
           padding: const EdgeInsets.only(
@@ -92,9 +102,17 @@ class _HomeScreen extends State<Homescreen> {
                       )
                     ]),
                 padding: const EdgeInsets.all(10),
-                child: const Icon(
-                  Icons.mode_night_outlined,
-                  color: Colors.grey,
+                child: InkWell(
+                  onTap: () {
+                    // SchedulerBinding.instance.addPostFrameCallback((_) {
+                    //   widget.themeX;
+                    // });
+                    // toggle
+                  },
+                  child: const Icon(
+                    Icons.mode_night_outlined,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
               Positioned(
@@ -167,12 +185,12 @@ class _HomeScreen extends State<Homescreen> {
         ]),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-        Center(
-          child: pages.elementAt(pageIndex),
-        ),
-      ]),),
+        child: Column(children: [
+          Center(
+            child: pages.elementAt(pageIndex),
+          ),
+        ]),
+      ),
       bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.grey,
@@ -186,15 +204,15 @@ class _HomeScreen extends State<Homescreen> {
               label: "Home",
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline), 
-                label: "Profile",
-                activeIcon: Icon(Icons.person),
-                ),
+              icon: Icon(Icons.person_outline),
+              label: "Profile",
+              activeIcon: Icon(Icons.person),
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.support_outlined), 
-                label: "Support",
-                activeIcon: Icon(Icons.support_sharp),
-                ),
+              icon: Icon(Icons.support_outlined),
+              label: "Support",
+              activeIcon: Icon(Icons.support_sharp),
+            ),
           ]),
     );
   }

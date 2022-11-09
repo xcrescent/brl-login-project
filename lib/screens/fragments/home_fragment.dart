@@ -38,36 +38,55 @@ class HomeFragment extends StatelessWidget {
               right: 15,
             ),
             child: Column(children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RichText(
-                        text: const TextSpan(children: [
-                          TextSpan(
-                              text: 'Howdy, What are You\n Looking For?',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                          TextSpan(
-                            text: '🤪',
-                            style: TextStyle(
-                              fontSize: 35,
-                            ),
-                          ),
-                        ]),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                RichText(
+                  text: const TextSpan(children: [
+                    TextSpan(
+                        text: 'Howdy, What are You\n Looking For?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    TextSpan(
+                      text: '🤪',
+                      style: TextStyle(
+                        fontSize: 35,
                       ),
-                    ]),
-                const SizedBox(
-                  height: 60,
+                    ),
+                  ]),
                 ),
               ]),
-            ),
-          
+              const SizedBox(
+                height: 60,
+              ),
+              const CircleAvatar(
+                radius: 64,
+                backgroundColor: Colors.blue,
+                backgroundImage: AssetImage('assets/images/utkarshsingh.jpeg'),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: const Text(
+                  "I am a Second year Undergraduate student pursuing Bachelors of Technology Degree in Computer Science and Engineering. I love solving problems and coming up with creative solutions, further reinforcing my knowledge of Data Structures and Algorithms. I am skilled in Kotlin, JavaScript, C, and Python along with that I am also into Freelance Full Stack Software Development whether it's Android or Web.",
+                  style: TextStyle(
+                    fontSize: 23.0,
+                    fontFamily: 'Dancing',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+            ]),
+          ),
         ],
       ),
     );

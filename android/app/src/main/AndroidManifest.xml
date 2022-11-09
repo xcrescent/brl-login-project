@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.login_proj">
    <application
-        android:label="login_proj"
+        android:label="Utkarsh Auth"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/th">
         <activity
             android:name=".MainActivity"
             android:exported="true"
