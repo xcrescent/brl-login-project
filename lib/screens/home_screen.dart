@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:login_proj/controllers/notification_controller.dart';
@@ -88,46 +86,46 @@ class _HomeScreen extends State<Homescreen> {
             const SizedBox(
               width: 20,
             ),
-            Stack(children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 0.1,
-                        blurRadius: 0.1,
-                        offset: const Offset(0, 1),
-                      )
-                    ]),
-                padding: const EdgeInsets.all(10),
-                child: InkWell(
-                  onTap: () {
-                    // SchedulerBinding.instance.addPostFrameCallback((_) {
-                    //   widget.themeX;
-                    // });
-                    // toggle
-                  },
-                  child: const Icon(
-                    Icons.mode_night_outlined,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: Container(
-                  height: 10,
-                  width: 10,
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ]),
+          //   Stack(children: [
+          //     Container(
+          //       decoration: BoxDecoration(
+          //           color: Colors.white,
+          //           borderRadius: BorderRadius.circular(10),
+          //           boxShadow: [
+          //             BoxShadow(
+          //               color: Colors.grey.withOpacity(0.3),
+          //               spreadRadius: 0.1,
+          //               blurRadius: 0.1,
+          //               offset: const Offset(0, 1),
+          //             )
+          //           ]),
+          //       padding: const EdgeInsets.all(10),
+          //       child: InkWell(
+          //         onTap: () {
+          //           // SchedulerBinding.instance.addPostFrameCallback((_) {
+          //           //   widget.themeX;
+          //           // });
+          //           // toggle
+          //         },
+          //         child: const Icon(
+          //           Icons.mode_night_outlined,
+          //           color: Colors.grey,
+          //         ),
+          //       ),
+          //     ),
+          //     Positioned(
+          //       top: 10,
+          //       right: 10,
+          //       child: Container(
+          //         height: 10,
+          //         width: 10,
+          //         decoration: const BoxDecoration(
+          //           color: Colors.black,
+          //           shape: BoxShape.circle,
+          //         ),
+          //       ),
+          //     ),
+          //   ]),
           ]),
         ),
       ),

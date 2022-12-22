@@ -114,7 +114,7 @@ class _LoginActivity extends State<LoginActivity>
   //     //     // _showErrorDialog("Invalid Email Address");
   //   } else {
   //     //     // _showErrorDialog("Invalid Password Value");
-  //     showSnackBarr("content", context);
+      // showSnackBarr("content", context);
   //   }
   // }
 
@@ -270,6 +270,7 @@ class _LoginActivity extends State<LoginActivity>
                   signInWithGoogle();
                 },
                 backgroundColor: Colors.transparent,
+                
                 child: Image.asset('assets/images/google.png'),
                 // shape:
               ),
